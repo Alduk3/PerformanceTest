@@ -18,7 +18,7 @@ public class ClassEntity {
     private Long id;
     @Column(nullable = false)
     private String name;
-    @Column(nullable = false)
+    @Column(columnDefinition = "TEXT",nullable = false)
     private String description;
     @Column(nullable = false)
     @Builder.Default
