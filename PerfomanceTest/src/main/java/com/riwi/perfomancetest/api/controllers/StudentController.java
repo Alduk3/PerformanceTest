@@ -1,8 +1,7 @@
 package com.riwi.perfomancetest.api.controllers;
 
-import com.riwi.perfomancetest.api.dto.request.ClassRequest;
 import com.riwi.perfomancetest.api.dto.request.StudentRequest;
-import com.riwi.perfomancetest.api.dto.response.ClassResponse;
+import com.riwi.perfomancetest.api.dto.response.StudentBasicResponse;
 import com.riwi.perfomancetest.api.dto.response.StudentResponse;
 import com.riwi.perfomancetest.infrastructure.abstract_services.IStudentService;
 import lombok.AllArgsConstructor;
@@ -18,11 +17,11 @@ public class StudentController {
     private final IStudentService studentService;
 
     @GetMapping
-    public ResponseEntity<Page<StudentResponse>> getAll(
+    public ResponseEntity<Page<StudentResponse>> getAllBasic(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
-        return ResponseEntity.ok(this.studentService.getAll(page-1, size));
+        return ResponseEntity.ok(this.studentService.getAll(page -1, size));
     }
 
     @GetMapping(path = "/{id}")
@@ -41,6 +40,21 @@ public class StudentController {
             @PathVariable Long id) {
         return ResponseEntity.ok(this.studentService.update(studentRequest, id));
     }
+
+//    @PatchMapping(path = "/{id}/{status}")
+//    public ResponseEntity<StudentResponse> updateStatus(@PathVariable Long id, @PathVariable String status) {
+//        if (status.equals("deactivate") || status.equals("activate")){
+//            return ResponseEntity.ok(this.studentService.updateStatus(id));
+//        }
+//        return ResponseEntity.badRequest().build();
+//    }
+
+    @PatchMapping(path = "/{id}/disable")
+    public ResponseEntity<StudentResponse> updateStatus(@PathVariable Long id) {
+        return ResponseEntity.ok(this.studentService.updateStatus(id));
+
+    }
+
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {

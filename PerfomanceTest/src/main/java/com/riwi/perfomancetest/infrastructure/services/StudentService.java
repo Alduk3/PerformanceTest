@@ -2,6 +2,7 @@ package com.riwi.perfomancetest.infrastructure.services;
 
 import com.riwi.perfomancetest.api.dto.request.StudentRequest;
 import com.riwi.perfomancetest.api.dto.response.ClassBasicResponse;
+import com.riwi.perfomancetest.api.dto.response.StudentBasicResponse;
 import com.riwi.perfomancetest.api.dto.response.StudentResponse;
 import com.riwi.perfomancetest.domain.entities.ClassEntity;
 import com.riwi.perfomancetest.domain.entities.StudentEntity;
@@ -15,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import java.awt.print.Pageable;
 
 @Service
 @AllArgsConstructor
@@ -54,6 +57,19 @@ public class StudentService implements IStudentService {
     }
 
     @Override
+    public StudentResponse updateStatus(Long id) {
+        StudentEntity studentEntity = this.find(id);
+
+        if (studentEntity.isActive()){
+            studentEntity.setActive(false);
+        }
+
+        return this.entityToResponse(this.studentRepository.save(studentEntity));
+    }
+
+
+
+    @Override
     public void delete(Long id) {
         this.studentRepository.delete(this.find(id));
 
@@ -66,6 +82,8 @@ public class StudentService implements IStudentService {
 
         return this.studentRepository.findAll(pagination).map(this::entityToResponse);
     }
+
+
 
     private StudentEntity find(Long id) {
         return this.studentRepository.findById(id).orElseThrow(() -> new BadRequestException("Student not found"));
