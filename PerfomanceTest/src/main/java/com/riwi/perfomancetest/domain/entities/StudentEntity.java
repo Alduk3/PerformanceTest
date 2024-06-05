@@ -1,32 +1,32 @@
 package com.riwi.perfomancetest.domain.entities;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
-@Entity(name = "class")
+@Entity(name = "student")
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class ClassEntity {
+@AllArgsConstructor
+public class StudentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
-    private String description;
+    private String email;
     @Column(nullable = false)
     private LocalDateTime creationDate;
     @Column(nullable = false)
     private boolean active;
 
-    @OneToMany(mappedBy = "classEntity", cascade = CascadeType.ALL, orphanRemoval = false, fetch = FetchType.EAGER)
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private List<StudentEntity> students;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "class_id", referencedColumnName = "id")
+    private ClassEntity classEntity;
 }
