@@ -69,6 +69,7 @@ public class StudentService implements IStudentService {
 
 
 
+
     @Override
     public void delete(Long id) {
         this.studentRepository.delete(this.find(id));
@@ -83,6 +84,18 @@ public class StudentService implements IStudentService {
         return this.studentRepository.findAll(pagination).map(this::entityToResponse);
     }
 
+    @Override
+    public Page<StudentBasicResponse> getAllBasic(int page, int size) {
+        if (page<0) page = 0;
+        PageRequest pagination = PageRequest.of(page, size);
+        return this.studentRepository.findByActiveTrue(pagination).map(this::entityToResponseBasic);
+    }
+    @Override
+    public Page<StudentBasicResponse> getAllBasic(int page, int size, String name) {
+        if (page<0) page = 0;
+        PageRequest pagination = PageRequest.of(page, size);
+        return this.studentRepository.findByNameContainingAndActiveTrue(name, pagination).map(this::entityToResponseBasic);
+    }
 
 
     private StudentEntity find(Long id) {
@@ -101,6 +114,16 @@ public class StudentService implements IStudentService {
                 .creationDate(entity.getCreationDate())
                 .active(entity.isActive())
                 .classResponse(classEntity)
+                .build();
+    }
+
+    private StudentBasicResponse entityToResponseBasic(StudentEntity entity) {
+        return StudentBasicResponse.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .email(entity.getEmail())
+                .creationDate(entity.getCreationDate())
+                .active(entity.isActive())
                 .build();
     }
 

@@ -7,4 +7,6 @@ import org.springframework.data.domain.Page;
 
 public interface IStudentService extends CRUDService<StudentRequest, StudentResponse, Long>{
     public StudentResponse updateStatus(Long id);
+    public Page<StudentBasicResponse> getAllBasic(int page, int size);
+    public Page<StudentBasicResponse> getAllBasic(int page, int size, String name);
 }
