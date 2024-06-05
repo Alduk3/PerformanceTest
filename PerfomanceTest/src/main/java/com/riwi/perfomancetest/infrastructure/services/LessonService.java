@@ -8,6 +8,7 @@ import com.riwi.perfomancetest.domain.entities.LessonEntity;
 import com.riwi.perfomancetest.domain.respositories.ClassRepository;
 import com.riwi.perfomancetest.domain.respositories.LessonRepository;
 import com.riwi.perfomancetest.infrastructure.abstract_services.ILessonService;
+import com.riwi.perfomancetest.utils.exceptions.BadRequestException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class LessonService implements ILessonService {
 
     @Override
     public LessonResponse create(LessonRequest request) {
-        ClassEntity classEntity = this.classRepository.findById(request.getClassId()).orElseThrow(null); // // Add Error handler
+        ClassEntity classEntity = this.classRepository.findById(request.getClassId()).orElseThrow(() -> new BadRequestException("Class not found"));
         LessonEntity lessonEntity = this.requestToEntity(request);
         lessonEntity.setClassEntity(classEntity);
         return this.entityToResponse(this.lessonRepository.save(lessonEntity));
@@ -42,7 +43,7 @@ public class LessonService implements ILessonService {
     @Override
     public LessonResponse update(LessonRequest request, Long id) {
         LessonEntity lessonEntity = this.find(id);
-        ClassEntity classEntity = this.classRepository.findById(request.getClassId()).orElseThrow(null); // // Add Error handler
+        ClassEntity classEntity = this.classRepository.findById(request.getClassId()).orElseThrow(() -> new BadRequestException("Class not found"));
 
         lessonEntity = this.requestToEntity(request);
 
@@ -66,7 +67,7 @@ public class LessonService implements ILessonService {
     }
 
     private LessonEntity find(Long id) {
-        return this.lessonRepository.findById(id).orElseThrow(null); // ADD error handler
+        return this.lessonRepository.findById(id).orElseThrow(() -> new BadRequestException("Lesson not found"));
     }
     private LessonResponse entityToResponse(LessonEntity lessonEntity) {
         ClassBasicResponse classEntity = new ClassBasicResponse();

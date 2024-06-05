@@ -22,7 +22,8 @@ public class StudentEntity {
     @Column(nullable = false)
     private String email;
     @Column(nullable = false)
-    private LocalDateTime creationDate;
+    @Builder.Default
+    private LocalDateTime creationDate = LocalDateTime.now();
     @Column(nullable = false)
     private boolean active;
 
