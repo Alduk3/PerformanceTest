@@ -1,6 +1,7 @@
 package com.riwi.perfomancetest.infrastructure.services;
 
 import com.riwi.perfomancetest.api.dto.request.ClassRequest;
+import com.riwi.perfomancetest.api.dto.response.ClassBasicResponse;
 import com.riwi.perfomancetest.api.dto.response.ClassResponse;
 import com.riwi.perfomancetest.api.dto.response.LessonBasicResponse;
 import com.riwi.perfomancetest.api.dto.response.StudentBasicResponse;
@@ -74,6 +75,7 @@ public class ClassService implements IClassService {
 
         List<StudentBasicResponse> students = entity.getStudents().stream().map(this::entityToStudentBasicResponse).toList();
         List<LessonBasicResponse> lessons = entity.getLessons().stream().map(this::entityToLessonBasicResponse).toList();
+
         return ClassResponse.builder()
                 .id(entity.getId())
                 .name(entity.getName())
@@ -110,6 +112,35 @@ public class ClassService implements IClassService {
                 .name(request.getName())
                 .description(request.getDescription())
                 .active(request.isActive())
+                .build();
+    }
+
+    @Override
+    public Page<ClassBasicResponse> getAllBasic(int page, int size, String name) {
+        if (page < 0) page = 0;
+        PageRequest pagination = PageRequest.of(page, size);
+
+        return this.classRepository.findByNameContainingAndActiveTrue(name, pagination).map(this::entityToResponseBasic);
+    }
+
+    @Override
+    public Page<ClassBasicResponse> getAllBasic(int page, int size) {
+        if (page < 0) page = 0;
+        PageRequest pagination = PageRequest.of(page, size);
+
+        return this.classRepository.findByActiveTrue(pagination).map(this::entityToResponseBasic);
+    }
+
+
+    private ClassBasicResponse entityToResponseBasic(ClassEntity entity) {
+
+
+        return ClassBasicResponse.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .description(entity.getDescription())
+                .creationDate(entity.getCreationDate())
+                .active(entity.isActive())
                 .build();
     }
 }

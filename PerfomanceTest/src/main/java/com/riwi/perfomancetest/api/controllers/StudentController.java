@@ -16,12 +16,24 @@ import org.springframework.web.bind.annotation.*;
 public class StudentController {
     private final IStudentService studentService;
 
+//    @GetMapping
+//    public ResponseEntity<Page<StudentResponse>> getAll(
+//            @RequestParam(defaultValue = "1") int page,
+//            @RequestParam(defaultValue = "10") int size
+//    ) {
+//        return ResponseEntity.ok(this.studentService.getAll(page -1, size));
+//    }
+
     @GetMapping
-    public ResponseEntity<Page<StudentResponse>> getAllBasic(
+    public ResponseEntity<Page<StudentBasicResponse>> getAllBasic(
             @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String name
     ) {
-        return ResponseEntity.ok(this.studentService.getAll(page -1, size));
+        if (name != null) {
+            return ResponseEntity.ok(this.studentService.getAllBasic(page-1, size, name));
+        }
+        return ResponseEntity.ok(this.studentService.getAllBasic(page -1, size));
     }
 
     @GetMapping(path = "/{id}")

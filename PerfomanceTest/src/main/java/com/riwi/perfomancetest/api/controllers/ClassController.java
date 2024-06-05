@@ -1,6 +1,7 @@
 package com.riwi.perfomancetest.api.controllers;
 
 import com.riwi.perfomancetest.api.dto.request.ClassRequest;
+import com.riwi.perfomancetest.api.dto.response.ClassBasicResponse;
 import com.riwi.perfomancetest.api.dto.response.ClassResponse;
 import com.riwi.perfomancetest.infrastructure.abstract_services.IClassService;
 import lombok.AllArgsConstructor;
@@ -16,12 +17,26 @@ public class ClassController {
 
     private final IClassService classService;
 
+//    @GetMapping
+//    public ResponseEntity<Page<ClassResponse>> getAll(
+//            @RequestParam(defaultValue = "1") int page,
+//            @RequestParam(defaultValue = "10") int size
+//    ) {
+//        return ResponseEntity.ok(this.classService.getAll(page-1, size));
+//    }
+
     @GetMapping
-    public ResponseEntity<Page<ClassResponse>> getAll(
+    public ResponseEntity<Page<ClassBasicResponse>> getAll(
             @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String name
     ) {
-        return ResponseEntity.ok(this.classService.getAll(page-1, size));
+        if (name != null) {
+            return ResponseEntity.ok(this.classService.getAllBasic(page-1, size, name));
+        } else {
+            return ResponseEntity.ok(this.classService.getAllBasic(page-1, size));
+        }
+
     }
 
     @GetMapping(path = "/{id}")
