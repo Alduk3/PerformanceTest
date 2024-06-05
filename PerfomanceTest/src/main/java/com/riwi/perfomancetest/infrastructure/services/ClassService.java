@@ -2,7 +2,9 @@ package com.riwi.perfomancetest.infrastructure.services;
 
 import com.riwi.perfomancetest.api.dto.request.ClassRequest;
 import com.riwi.perfomancetest.api.dto.response.ClassResponse;
+import com.riwi.perfomancetest.api.dto.response.StudentBasicResponse;
 import com.riwi.perfomancetest.domain.entities.ClassEntity;
+import com.riwi.perfomancetest.domain.entities.StudentEntity;
 import com.riwi.perfomancetest.domain.respositories.ClassRepository;
 import com.riwi.perfomancetest.infrastructure.abstract_services.IClassService;
 import lombok.AllArgsConstructor;
@@ -10,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -60,14 +65,29 @@ public class ClassService implements IClassService {
     }
 
     private ClassResponse entityToResponse(ClassEntity entity) {
+
+        List<StudentBasicResponse> students = entity.getStudents().stream().map(this::entityToStudentBasicResponse).toList();
+
         return ClassResponse.builder()
                 .id(entity.getId())
                 .name(entity.getName())
                 .description(entity.getDescription())
                 .creationDate(entity.getCreationDate())
                 .active(entity.isActive())
+                .students(students)
                 .build();
     }
+
+    private StudentBasicResponse entityToStudentBasicResponse(StudentEntity entity) {
+        return StudentBasicResponse.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .email(entity.getEmail())
+                .creationDate(entity.getCreationDate())
+                .active(entity.isActive())
+                .build();
+    }
+
     private ClassEntity requestToEntity(ClassRequest request) {
         return ClassEntity.builder()
                 .name(request.getName())
