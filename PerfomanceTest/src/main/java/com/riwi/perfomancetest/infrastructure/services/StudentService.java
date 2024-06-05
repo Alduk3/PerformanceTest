@@ -8,6 +8,7 @@ import com.riwi.perfomancetest.domain.entities.StudentEntity;
 import com.riwi.perfomancetest.domain.respositories.ClassRepository;
 import com.riwi.perfomancetest.domain.respositories.StudentRepository;
 import com.riwi.perfomancetest.infrastructure.abstract_services.IStudentService;
+import com.riwi.perfomancetest.utils.exceptions.BadRequestException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class StudentService implements IStudentService {
 
     @Override
     public StudentResponse create(StudentRequest request) {
-        ClassEntity classEntity = this.classRepository.findById(request.getClass_id()).orElseThrow(null); // // Add Error handler
+        ClassEntity classEntity = this.classRepository.findById(request.getClass_id()).orElseThrow(() -> new BadRequestException("Class not found"));
 
         StudentEntity studentEntity = this.requestToEntity(request);
         studentEntity.setClassEntity(classEntity);
@@ -43,7 +44,7 @@ public class StudentService implements IStudentService {
     @Override
     public StudentResponse update(StudentRequest request, Long id) {
         StudentEntity studentEntity = this.find(id);
-        ClassEntity classEntity = this.classRepository.findById(request.getClass_id()).orElseThrow(null); // // Add Error handler
+        ClassEntity classEntity = this.classRepository.findById(request.getClass_id()).orElseThrow(() -> new BadRequestException("Class not found"));
 
         studentEntity = this.requestToEntity(request);
 
@@ -67,7 +68,7 @@ public class StudentService implements IStudentService {
     }
 
     private StudentEntity find(Long id) {
-        return this.studentRepository.findById(id).orElseThrow(null);// Add Error handler
+        return this.studentRepository.findById(id).orElseThrow(() -> new BadRequestException("Student not found"));
     }
 
     private StudentResponse entityToResponse(StudentEntity entity) {

@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity(name = "lesson")
@@ -22,7 +23,8 @@ public class LessonEntity {
     @Column(nullable = false)
     private String description;
     @Column(nullable = false)
-    private Date createAt;
+    @Builder.Default
+    private LocalDateTime createAt = LocalDateTime.now();
     @Column(nullable = false)
     private boolean active;
 

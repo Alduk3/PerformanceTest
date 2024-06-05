@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -15,7 +16,7 @@ public class LessonResponse {
     private Long id;
     private String title;
     private String description;
-    private Date createAt;
+    private LocalDateTime createAt;
     private boolean active;
     private ClassBasicResponse classResponse;
 }
