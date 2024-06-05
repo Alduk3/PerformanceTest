@@ -5,20 +5,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Date;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClassResponse {
+public class LessonBasicResponse {
     private Long id;
-    private String name;
+    private String title;
     private String description;
-    private LocalDateTime creationDate;
+    private Date createAt;
     private boolean active;
-    private List<StudentBasicResponse> students;
-    private List<LessonBasicResponse> lessons;
 }

@@ -29,4 +29,9 @@ public class ClassEntity {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private List<StudentEntity> students;
+
+    @OneToMany(mappedBy = "classEntity", cascade = CascadeType.ALL, orphanRemoval = false, fetch = FetchType.EAGER)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private List<LessonEntity> lessons;
 }
